@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     calendar.set(
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the alarm to start at approximately 11:00 a.m.
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
