@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String CHANNEL_ID = "com.saeefmd.alarmnotificationdemo";
 
+    private boolean scheduledNotificationIsOn;
     private TimePicker alarmTimePicker;
 
     @Override
@@ -34,8 +36,14 @@ public class MainActivity extends AppCompatActivity {
         alarmTimePicker = findViewById(R.id.alarm_time_picker);
         Button setAlarmBt = findViewById(R.id.alarm_set_bt);
 
+        SharedPreferences mSharedPref = getSharedPreferences("alarmnotificationdemo", MODE_PRIVATE);
+        scheduledNotificationIsOn = mSharedPref.getBoolean("notificationFlag", false);
+
         createNotificationChannel();
-        setScheduledNotification();
+
+        if (!scheduledNotificationIsOn) {
+            setScheduledNotification();
+        }
 
         setAlarmBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
         // constants--in this case, AlarmManager.INTERVAL_DAY.
         notificationAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+
+        SharedPreferences.Editor editor = getSharedPreferences("alarmnotificationdemo", MODE_PRIVATE).edit();
+        editor.putBoolean("notificationFlag", true);
+        editor.apply();
 
     }
 
