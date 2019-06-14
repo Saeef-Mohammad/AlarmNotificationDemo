@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextClock;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,10 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static String CHANNEL_ID = "com.saeefmd.alarmnotificationdemo";
 
-    private boolean scheduledNotificationIsOn;
-
     private TimePicker alarmTimePicker;
-    private TextClock alarmTextClock;
+    private TextView alarmTimeTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +35,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         alarmTimePicker = findViewById(R.id.alarm_time_picker);
-        alarmTextClock = findViewById(R.id.alarm_text_clock);
+        alarmTimeTv = findViewById(R.id.alarm_time_tv);
         Button setAlarmBt = findViewById(R.id.alarm_set_bt);
 
         SharedPreferences mSharedPref = getSharedPreferences("alarmnotificationdemo", MODE_PRIVATE);
-        scheduledNotificationIsOn = mSharedPref.getBoolean("notificationFlag", false);
+        boolean scheduledNotificationIsOn = mSharedPref.getBoolean("notificationFlag", false);
+
+        int alarmHour = mSharedPref.getInt("hour", -1);
+        int alarmMinute = mSharedPref.getInt("minute", -1);
+
+        if (alarmHour != -1 && alarmMinute != -1) {
+            alarmTimeTv.setText("Alarm Time - " + alarmHour + ":" + alarmMinute);
+        }
 
         createNotificationChannel();
 
@@ -56,29 +61,36 @@ public class MainActivity extends AppCompatActivity {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    calendar.set(
-                            calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH),
-                            alarmTimePicker.getHour(),
-                            alarmTimePicker.getMinute(),
-                            0
-                    );
-                } else {
+                int hour, minute;
 
-                    calendar.set(
-                            calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH),
-                            alarmTimePicker.getCurrentHour(),
-                            alarmTimePicker.getCurrentMinute(),
-                            0
-                    );
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    hour = alarmTimePicker.getHour();
+                    minute = alarmTimePicker.getMinute();
+                } else {
+                    hour = alarmTimePicker.getCurrentHour();
+                    minute = alarmTimePicker.getCurrentMinute();
                 }
 
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.set(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        hour,
+                        minute,
+                        0
+                );
+
                 setAlarm(calendar.getTimeInMillis());
+
+                alarmTimeTv.setText("Alarm Time - " + hour + ":" + minute);
+
+                SharedPreferences.Editor editor = getSharedPreferences("alarmnotificationdemo", MODE_PRIVATE).edit();
+                editor.putInt("hour", hour);
+                editor.putInt("minute", minute);
+                editor.apply();
             }
+
         });
 
     }
