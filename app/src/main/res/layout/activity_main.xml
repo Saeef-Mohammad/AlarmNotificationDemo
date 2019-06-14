@@ -20,4 +20,12 @@
         android:layout_gravity="center_horizontal"
         android:text="Set"/>
 
+    <TextClock
+        android:id="@+id/alarm_text_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"/>
+
 </LinearLayout>

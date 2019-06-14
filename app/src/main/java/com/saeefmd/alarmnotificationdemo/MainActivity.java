@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextClock;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
     public static String CHANNEL_ID = "com.saeefmd.alarmnotificationdemo";
 
     private boolean scheduledNotificationIsOn;
+
     private TimePicker alarmTimePicker;
+    private TextClock alarmTextClock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         alarmTimePicker = findViewById(R.id.alarm_time_picker);
+        alarmTextClock = findViewById(R.id.alarm_text_clock);
         Button setAlarmBt = findViewById(R.id.alarm_set_bt);
 
         SharedPreferences mSharedPref = getSharedPreferences("alarmnotificationdemo", MODE_PRIVATE);
