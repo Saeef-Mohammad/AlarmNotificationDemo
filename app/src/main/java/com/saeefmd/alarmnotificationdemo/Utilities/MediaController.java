@@ -4,6 +4,8 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.provider.Settings;
 
+
+
 public class MediaController {
 
     private static MediaController sInstance;
@@ -22,7 +24,7 @@ public class MediaController {
     }
 
     public void playMusic() {
-        mMediaPlayer = MediaPlayer.create(mContext, Settings.System.DEFAULT_RINGTONE_URI);
+        mMediaPlayer = MediaPlayer.create(mContext, Settings.System.DEFAULT_ALARM_ALERT_URI);
         mMediaPlayer.start();
     }
 
